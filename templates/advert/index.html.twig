@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advert index{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold mb-6">Advert index</h1>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+            <tr>
+                <th class="border border-gray-300 px-4 py-2">Id</th>
+                <th class="border border-gray-300 px-4 py-2">Title</th>
+                <th class="border border-gray-300 px-4 py-2">Content</th>
+                <th class="border border-gray-300 px-4 py-2">Author</th>
+                <th class="border border-gray-300 px-4 py-2">Email</th>
+                <th class="border border-gray-300 px-4 py-2">Price</th>
+                <th class="border border-gray-300 px-4 py-2">State</th>
+                <th class="border border-gray-300 px-4 py-2">CreatedAt</th>
+                <th class="border border-gray-300 px-4 py-2">PublishedAt</th>
+                <th class="border border-gray-300 px-4 py-2">Actions</th>
+                <th class="border border-gray-300 px-4 py-2">Picture</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for advert in adverts %}
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.id }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.title }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.content }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.author }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.email }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.price }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.state }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.createdAt ? advert.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ advert.publishedAt ? advert.publishedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <a href="{{ path('app_advert_show', {'id': advert.id}) }}" class="text-blue-500 hover:text-blue-600">Show</a>
+                        <a href="{{ path('app_advert_edit', {'id': advert.id}) }}" class="text-green-500 hover:text-green-600 ml-2">Edit</a>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        {% for picture in advert.getPictures() %}
+                            {% if picture.getPath() %}
+                                <img src="{{ asset('uploads/' ~ picture.getPath()) }}" alt="Advert Image" style="max-width: 100px; max-height: 100px;">
+                            {% else %}
+                                No Image
+                            {% endif %}
+                        {% else %}
+                            No Pictures
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10" class="border border-gray-300 px-4 py-2 text-center">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p class="mt-4 text-center">
+        <a href="{{ path('app_advert_new') }}" class="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
+            Create new
+        </a>
+    </p>
+    <p class="mt-4 text-center">
+        <a href="{{ path('app_home') }}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
+           Home
+        </a>
+    </p>
+{% endblock %}

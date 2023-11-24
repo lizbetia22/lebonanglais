@@ -45,4 +45,15 @@ class AdvertRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    /**
+     * @return Advert[] Returns an array of Advert objects
+     */
+    public function findAllPublished(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.state = :publishedState')
+            ->setParameter('publishedState', 'published')
+            ->getQuery()
+            ->getResult();
+    }
 }

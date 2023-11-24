@@ -3,24 +3,24 @@
 {% block title %}Category{% endblock %}
 
 {% block body %}
-    <h1>Category</h1>
+    <h1 class="text-3xl font-bold mb-4">Category</h1>
 
-    <table class="table">
+    <table class="table border-collapse border w-full">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ category.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ category.name }}</td>
-            </tr>
+        <tr class="bg-gray-100">
+            <th class="py-2 px-4 border border-gray-300">Id</th>
+            <td class="py-2 px-4 border border-gray-300">{{ category.id }}</td>
+        </tr>
+        <tr class="bg-gray-200">
+            <th class="py-2 px-4 border border-gray-300">Name</th>
+            <td class="py-2 px-4 border border-gray-300">{{ category.name }}</td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_category_index') }}">back to list</a>
+    <a href="{{ path('app_admin_category_index') }}" class="block mt-4 text-blue-500 hover:underline">Back to list</a>
 
-    <a href="{{ path('app_admin_category_edit', {'id': category.id}) }}">edit</a>
+    <a href="{{ path('app_admin_category_edit', {'id': category.id}) }}" class="block mt-2 text-blue-500 hover:underline">Edit</a>
 
     {{ include('admin_category/_delete_form.html.twig') }}
 {% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lebonangle{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.2.2/flickity.min.css">
+    <style>
+        .single-image {
+            max-width: 250px;
+            max-height: 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold mb-4 text-red-500">Welcome to Lebonangle</h1>
+
+    <div class="grid grid-cols-3 gap-6">
+        {% for advert in publishedAdverts %}
+            <div class="bg-white rounded-lg shadow-md p-4">
+                {% set pictures = advert.getPictures() %}
+                {% set picturesCount = pictures|length %}
+
+                {% if picturesCount > 0 %}
+                    {% if picturesCount == 1 %}
+                        {% set picture = pictures[0] %}
+                        {% if picture.getPath() %}
+                            <img src="{{ asset('uploads/' ~ picture.getPath()) }}" alt="Advert Image" class="mt-4 rounded-lg single-image">
+                        {% else %}
+                            <img src="{{ asset('uploads/default.jpg') }}" alt="Default Placeholder" class="mt-4 rounded-lg single-image">
+                        {% endif %}
+                    {% else %}
+                        <div class="carousel" data-flickity='{ "wrapAround": true }'>
+                            {% for picture in pictures %}
+                                {% if picture.getPath() %}
+                                    <div class="carousel-cell">
+                                        <img src="{{ asset('uploads/' ~ picture.getPath()) }}" alt="Advert Image" class="mt-4 rounded-lg single-image">
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <img src="{{ asset('uploads/logo.jpg') }}" alt="Default Placeholder" class="mt-4 rounded-lg single-image">
+                {% endif %}
+
+                <div class="mt-4">
+                    <h3 class="text-xl font-bold text-red-400 mb-2">{{ advert.title }}</h3>
+                    <p><strong>Author:</strong> {{ advert.author }}</p>
+                    <p><strong>Email:</strong> {{ advert.email }}</p>
+                    <p><strong>Category:</strong> {{ advert.category.getName() }}</p>
+                    <p><strong>Price:</strong> {{ advert.price }}</p>
+                    <p><strong>Published:</strong> {{ advert.publishedAt|date('d/m/Y H:i') }}</p>
+                </div>
+            </div>
+        {% else %}
+            <p class="col-span-3">No adverts found.</p>
+        {% endfor %}
+    </div>
+
+    <div class="flex justify-start mt-4">
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:shadow-outline-red">
+                Logout
+            </a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
+                Connection
+            </a>
+        {% endif %}
+
+        <a href="{{ path('app_advert_new') }}" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green ml-2">
+            Create advert
+        </a>
+
+        <a href="{{ path('app_admin_category_index') }}" class="bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green ml-2">
+            Category
+        </a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.2.2/flickity.pkgd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var carousels = document.querySelectorAll('.carousel');
+            for (var i = 0; i < carousels.length; i++) {
+                var imagesCount = carousels[i].querySelectorAll('.carousel-cell').length;
+                if (imagesCount === 1) {
+                    carousels[i].removeAttribute('data-flickity');
+                }
+                new Flickity(carousels[i]);
+            }
+        });
+    </script>
+{% endblock %}

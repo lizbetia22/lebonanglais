@@ -1,4 +1,10 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{# admin_category/_form.html.twig #}
+
+{{ form_start(form, {'attr': {'class': 'max-w-md mx-auto'}}) }}
+<div class="mb-4">
+    {{ form_label(form.name, 'Name:', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+    {{ form_widget(form.name, {'attr': {'class': 'border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 w-full'}}) }}
+</div>
+
+<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save</button>
 {{ form_end(form) }}

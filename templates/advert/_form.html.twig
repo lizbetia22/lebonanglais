@@ -1,0 +1,37 @@
+<div class="max-w-md mx-auto">
+    {{ form_start(form, {'attr': {'class': 'mt-8'}}) }}
+
+    <div class="mb-4">
+        {{ form_row(form.title, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_row(form.content, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_row(form.author, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_row(form.email, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_row(form.price, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_row(form.category, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_row(form.picture, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+    </div>
+
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Save
+    </button>
+
+    {{ form_end(form) }}
+</div>

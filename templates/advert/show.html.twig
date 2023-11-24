@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advert{% endblock %}
+
+{% block body %}
+    <div class="max-w-md mx-auto bg-white rounded overflow-hidden shadow-lg my-8">
+        <div class="px-6 py-4">
+            <h1 class="text-3xl font-bold mb-4">Advert</h1>
+
+            <div class="mb-4">
+                <p class="font-semibold">Id:</p>
+                <p>{{ advert.id }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">Title:</p>
+                <p>{{ advert.title }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">Content:</p>
+                <p>{{ advert.content }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">Author:</p>
+                <p>{{ advert.author }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">Email:</p>
+                <p>{{ advert.email }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">Price:</p>
+                <p>{{ advert.price }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">State:</p>
+                <p>{{ advert.state }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">CreatedAt:</p>
+                <p>{{ advert.createdAt ? advert.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+            </div>
+            <div class="mb-4">
+                <p class="font-semibold">PublishedAt:</p>
+                <p>{{ advert.publishedAt ? advert.publishedAt|date('Y-m-d H:i:s') : '' }}</p>
+            </div>
+        <div class="mb-4">
+            <p class="font-semibold">Pictures:</p>
+             {% for picture in advert.getPictures() %}
+                    {% if picture.getPath() %}
+                        <img src="{{ asset('uploads/' ~ picture.getPath()) }}" alt="Advert Image" style="max-width: 100px; max-height: 100px;">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                {% else %}
+                    No Pictures
+                {% endfor %}
+        </div>
+        </div>
+
+        <div class="px-6 py-4">
+            <a href="{{ path('app_advert_index') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Back to list</a>
+            <a href="{{ path('app_advert_edit', {'id': advert.id}) }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ml-2 focus:outline-none focus:shadow-outline">Edit</a>
+        </div>
+    </div>
+{% endblock %}

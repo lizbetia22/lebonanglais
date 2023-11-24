@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AdminUser index{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold mb-6">AdminUser index</h1>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+            <tr>
+                <th class="border border-gray-300 px-4 py-2">Id</th>
+                <th class="border border-gray-300 px-4 py-2">Email</th>
+                <th class="border border-gray-300 px-4 py-2">Username</th>
+                <th class="border border-gray-300 px-4 py-2">Roles</th>
+                <th class="border border-gray-300 px-4 py-2">Password</th>
+                <th class="border border-gray-300 px-4 py-2">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for admin_user in admin_users %}
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">{{ admin_user.id }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ admin_user.email }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ admin_user.username }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ admin_user.roles ? admin_user.roles|json_encode : '' }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ admin_user.password }}</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <a href="{{ path('app_admin_user_show', {'id': admin_user.id}) }}" class="text-blue-500 hover:text-blue-600">Show</a>
+                        <a href="{{ path('app_admin_user_edit', {'id': admin_user.id}) }}" class="text-green-500 hover:text-green-600 ml-2">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="border border-gray-300 px-4 py-2 text-center">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ path('app_admin_user_new') }}" class="block mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Create new</a>
+{% endblock %}

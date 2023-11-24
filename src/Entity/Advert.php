@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AdvertRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -18,16 +19,9 @@ class Advert
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\Range(
-        min: 3,
-        max: 100,
-    )]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Assert\Range(
-        max: 1200,
-    )]
+    #[ORM\Column(type: Types::TEXT, length: 1200)]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
@@ -56,7 +50,7 @@ class Advert
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $publishedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'advert', targetEntity: Picture::class)]
+    #[ORM\OneToMany(mappedBy: 'advert', targetEntity: Picture::class,cascade: ['persist'])]
     private Collection $pictures;
 
     public function __construct()
@@ -170,7 +164,7 @@ class Advert
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(\DateTimeInterface $publishedAt): static
+    public function setPublishedAt(?DateTimeInterface $publishedAt = null): self
     {
         $this->publishedAt = $publishedAt;
 
