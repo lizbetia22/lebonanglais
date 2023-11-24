@@ -16,7 +16,7 @@
 {% block body %}
     <h1 class="text-3xl font-bold mb-4 text-red-500">Welcome to Lebonangle</h1>
 
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-5 gap-9">
         {% for advert in publishedAdverts %}
             <div class="bg-white rounded-lg shadow-md p-4">
                 {% set pictures = advert.getPictures() %}
@@ -42,7 +42,7 @@
                         </div>
                     {% endif %}
                 {% else %}
-                    <img src="{{ asset('uploads/logo.jpg') }}" alt="Default Placeholder" class="mt-4 rounded-lg single-image">
+                    <img src="{{ asset('uploads/logo_lebonangle.jpg') }}" alt="Default Placeholder" class="mt-4 rounded-lg single-image">
                 {% endif %}
 
                 <div class="mt-4">
