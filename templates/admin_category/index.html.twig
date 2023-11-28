@@ -3,6 +3,11 @@
 {% block title %}Category index{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('error') %}
+        <div class="bg-red-500 text-white p-4 mb-4 mt-4 rounded">
+            {{ message }}
+        </div>
+    {% endfor %}
     <h1 class="text-3xl font-bold mb-4">Category index</h1>
 
     <table class="min-w-full divide-y divide-gray-200">
@@ -34,12 +39,37 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="mt-8">
-    <a href="{{ path('app_admin_category_new') }}" class="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue mt-4 mr-4">
-        Create new category
-    </a>
-    <a href="{{ path('app_home') }}" class="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue mt-4">
-        Home
-    </a>
+
+    <div class="flex justify-between items-center mt-4">
+        <div>
+            {% if maxPages > 1 %}
+                {% for page in 1..maxPages %}
+                    <a href="{{ path('app_admin_category_index', {'page': page}) }}" class="bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue mr-2 {% if page == currentPage %}font-bold{% endif %}">
+                        {{ page }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div>
+            {% if currentPage > 1 %}
+                <a href="{{ path('app_admin_category_index', {'page': currentPage - 1}) }}" class="bg-gray-200 text-black py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:shadow-outline-blue mr-2">
+                    Previous
+                </a>
+            {% endif %}
+            {% if currentPage < maxPages %}
+                <a href="{{ path('app_admin_category_index', {'page': currentPage + 1}) }}" class="bg-gray-200 text-black py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:shadow-outline-blue">
+                    Next
+                </a>
+            {% endif %}
+        </div>
     </div>
+
+    <div class="flex justify-start mt-4">
+        <a href="{{ path('app_admin_category_new') }}" class="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue mt-4 mr-4 inline-block">
+            Create new category
+        </a>
+        <a href="{{ path('app_home') }}" class="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue mt-4 inline-block">
+            Home
+        </a>
+</div>
 {% endblock %}

@@ -3,6 +3,11 @@
 {% block title %}AdminUser index{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('error') %}
+        <div class="bg-red-500 text-white p-4 mb-4 mt-4 rounded">
+            {{ message }}
+        </div>
+    {% endfor %}
     <h1 class="text-3xl font-bold mb-6">AdminUser index</h1>
 
     <div class="overflow-x-auto">
@@ -38,6 +43,13 @@
             </tbody>
         </table>
     </div>
-
-    <a href="{{ path('app_admin_user_new') }}" class="block mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Create new</a>
+    <div class="flex justify-start mt-4">
+        <a href="{{ path('app_admin_user_new') }}" class="bg-green-400 text-white py-2 px-4 pl-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue mt-4 mr-4 ml-4 inline-block">
+            Create new
+        </a>
+        <a href="{{ path('app_home') }}" class="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue mt-4 inline-block">
+            Home
+        </a>
+    </div>
 {% endblock %}
+

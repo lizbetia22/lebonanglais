@@ -13,11 +13,21 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Workflow\WorkflowInterface;
+use Vich\UploaderBundle\Handler\UploadHandler;
 
 //#[Route('/advert')]
 class AdvertController extends AbstractController
 {
+    public function __construct(WorkflowInterface $advertWorkflow)
+    {
+        $this->advertWorkflow = $advertWorkflow;
+    }
+
     #[Route('/admin/advert', name: 'app_advert_index', methods: ['GET'])]
     public function index(AdvertRepository $advertRepository): Response
     {
@@ -27,35 +37,13 @@ class AdvertController extends AbstractController
     }
 
     #[Route('/advert/new', name: 'app_advert_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $advert = new Advert();
-
         $form = $this->createForm(AdvertType::class, $advert);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile|null $pictureFile */
-            $pictureFiles = $form->get('picture')->getData();
-
-            foreach ($pictureFiles as $pictureFile){
-                if ($pictureFile instanceof UploadedFile) {
-                    $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
-                    try {
-                        $pictureFile->move(
-                            $this->getParameter('uploads_directory'),
-                            $newFilename
-                        );
-                    } catch (FileException $e) {
-                    }
-
-                    $picture = new Picture();
-                    $picture->setPath($newFilename);
-
-                    $advert->addPicture($picture);
-                }
-        }
-
             $entityManager->persist($advert);
             $entityManager->flush();
 
@@ -74,6 +62,35 @@ class AdvertController extends AbstractController
         return $this->render('advert/show.html.twig', [
             'advert' => $advert,
         ]);
+    }
+
+    #[Route('/admin/{id}/{transition}', name: 'app_advert_state', methods: ['GET', 'POST'])]
+    public function updateState(Request $request, Advert $advert, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $workflow = $this->advertWorkflow;
+        $transition = $request->attributes->get('transition');
+
+        if ($workflow->can($advert, $transition)) {
+            $workflow->apply($advert, $transition);
+
+            if ($transition === 'publish') {
+                $advert->setPublishedAt(new \DateTime());
+                (new MailerController)->sendEmail($mailer, $advert->getEmail());
+            } elseif ($transition === 'reject_publish') {
+                $advert->setPublishedAt(null);
+            }
+
+            $entityManager->persist($advert);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Status was changed successfully.');
+
+            return $this->redirectToRoute('app_advert_index');
+        }
+
+        $this->addFlash('error', 'Transition not allowed.');
+
+        return $this->redirectToRoute('app_advert_index');
     }
 
     #[Route('/admin/{id}/edit', name: 'app_advert_edit', methods: ['GET', 'POST'])]

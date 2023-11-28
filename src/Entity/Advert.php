@@ -42,7 +42,7 @@ class Advert
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $state = null;
+    private ?string $state = "draft";
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -56,6 +56,7 @@ class Advert
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
+        $this->createdAt = (new \DateTime());
     }
 
     public function getId(): ?int
@@ -192,7 +193,6 @@ class Advert
     public function removePicture(Picture $picture): static
     {
         if ($this->pictures->removeElement($picture)) {
-            // set the owning side to null (unless already changed)
             if ($picture->getAdvert() === $this) {
                 $picture->setAdvert(null);
             }

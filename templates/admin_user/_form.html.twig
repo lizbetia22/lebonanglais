@@ -1,4 +1,24 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'mt-8'}}) }}
+
+<div class="mb-4">
+    {{ form_label(form.username, 'Username', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+    {{ form_widget(form.username, {'attr': {'class': 'border rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:border-blue-500', 'placeholder': 'Enter your username'}}) }}
+</div>
+
+<div class="mb-4">
+    {{ form_label(form.email, 'Email', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+    {{ form_widget(form.email, {'attr': {'class': 'border rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:border-blue-500', 'placeholder': 'Enter your email'}}) }}
+</div>
+
+<div class="mb-4">
+    {{ form_label(form.plainPassword, 'Password', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+    {{ form_widget(form.plainPassword, {'attr': {'class': 'border rounded-lg py-2 px-4 w-full focus:outline-none focus:ring focus:border-blue-500', 'placeholder': 'Enter your password'}}) }}
+</div>
+
+<div class="mt-6">
+    <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-blue-600">
+        {{ button_label|default('Save') }}
+    </button>
+</div>
+
 {{ form_end(form) }}

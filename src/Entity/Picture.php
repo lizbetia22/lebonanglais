@@ -5,8 +5,12 @@ namespace App\Entity;
 use App\Repository\PictureRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Mime\Part\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
+#[Vich\Uploadable]
 class Picture
 {
     #[ORM\Id]
@@ -22,6 +26,9 @@ class Picture
 
     #[ORM\ManyToOne(inversedBy: 'pictures')]
     private ?Advert $advert = null;
+
+    #[Vich\UploadableField(mapping: 'picture', fileNameProperty: 'path')]
+    private ?File $imageFile = null;
 
     public function __construct()
     {
@@ -67,5 +74,15 @@ class Picture
         $this->advert = $advert;
 
         return $this;
+    }
+
+    public function setImageFile(?File $imageFile): void
+    {
+        $this->imageFile = $imageFile;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
     }
 }

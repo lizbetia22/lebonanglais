@@ -5,6 +5,13 @@
 {% block body %}
     <h1 class="text-3xl font-bold mb-6">Advert index</h1>
 
+    {% for message in app.flashes('success') %}
+        <div class="bg-green-500 text-white p-4 mb-4 mt-4 rounded relative">
+            {{ message }}
+            <button type="button" class="absolute top-0 right-0 px-3 py-1" onclick="this.parentElement.style.display = 'none';">&times;</button>
+        </div>
+    {% endfor %}
+
     <div class="overflow-x-auto">
         <table class="min-w-full border-collapse border border-gray-300">
             <thead>
@@ -36,7 +43,12 @@
                     <td class="border border-gray-300 px-4 py-2">{{ advert.publishedAt ? advert.publishedAt|date('Y-m-d H:i:s') : '' }}</td>
                     <td class="border border-gray-300 px-4 py-2">
                         <a href="{{ path('app_advert_show', {'id': advert.id}) }}" class="text-blue-500 hover:text-blue-600">Show</a>
-                        <a href="{{ path('app_advert_edit', {'id': advert.id}) }}" class="text-green-500 hover:text-green-600 ml-2">Edit</a>
+                        {% if advert.state == 'draft' %}
+                            <a href="{{ path('app_advert_state', {'id': advert.id, 'transition': 'publish'}) }}" class="text-green-500 hover:text-green-600 ml-2">Publish</a>
+                            <a href="{{ path('app_advert_state', {'id': advert.id, 'transition': 'reject'}) }}" class="text-red-500 hover:text-red-500 ml-2">Reject</a>
+                        {% elseif advert.state == 'published' %}
+                            <a href="{{ path('app_advert_state', {'id': advert.id, 'transition': 'reject_publish'}) }}" class="text-red-500 hover:text-red-500 ml-2">Reject</a>
+                        {% endif %}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
                         {% for picture in advert.getPictures() %}

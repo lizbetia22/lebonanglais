@@ -22,13 +22,14 @@
                 </div>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Login</button>
+                <p class="mt-4 text-center">
+                    <button type="submit" class="bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Login</button>
+                </p>
             </form>
 
             <p class="mt-4 text-center">
-                <a href="{{ path('app_home') }}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
-                   Back
+                <a href="{{ path('app_home') }}" class="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
+                   Back to home
                 </a>
             </p>
         </div>

@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl font-bold mb-4 text-red-500">Welcome to Lebonangle</h1>
+    <h1 class="text-3xl font-bold mb-4 text-red-500">Welcome to LeBonAngle</h1>
 
     <div class="grid grid-cols-5 gap-9">
         {% for advert in publishedAdverts %}
@@ -51,6 +51,7 @@
                     <p><strong>Email:</strong> {{ advert.email }}</p>
                     <p><strong>Category:</strong> {{ advert.category.getName() }}</p>
                     <p><strong>Price:</strong> {{ advert.price }}</p>
+                    <p><strong>Number of photos:</strong> {{ advert.getPictures|length }}</p>
                     <p><strong>Published:</strong> {{ advert.publishedAt|date('d/m/Y H:i') }}</p>
                 </div>
             </div>
@@ -71,11 +72,14 @@
         {% endif %}
 
         <a href="{{ path('app_advert_new') }}" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green ml-2">
-            Create advert
+            Advert
         </a>
 
         <a href="{{ path('app_admin_category_index') }}" class="bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green ml-2">
             Category
+        </a>
+        <a href="{{ path('app_admin_user_index') }}" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green ml-2">
+           Admin
         </a>
     </div>
 {% endblock %}

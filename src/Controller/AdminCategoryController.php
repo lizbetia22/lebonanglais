@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminCategoryController extends AbstractController
 {
     #[Route('/', name: 'app_admin_category_index', methods: ['GET'])]
-    public function index(CategoryRepository $categoryRepository): Response
+    public function index(Request $request, CategoryRepository $categoryRepository): Response
     {
+        $page = $request->query->getInt('page', 1);
+        $limit = 29;
+
+        $query = $categoryRepository->createQueryBuilder('c')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+        $paginator->getQuery()
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        $categories = $paginator->getIterator();
+
+        $totalCategories = $paginator->count();
+        $maxPages = ceil($totalCategories / $limit);
+
         return $this->render('admin_category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'categories' => $categories,
+            'maxPages' => $maxPages,
+            'currentPage' => $page,
         ]);
     }
 
@@ -71,9 +91,15 @@ class AdminCategoryController extends AbstractController
     #[Route('/{id}', name: 'app_admin_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($category);
-            $entityManager->flush();
+        try {
+            if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->request->get('_token'))) {
+                $entityManager->remove($category);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_admin_category_index', [], Response::HTTP_SEE_OTHER);
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
         }
 
         return $this->redirectToRoute('app_admin_category_index', [], Response::HTTP_SEE_OTHER);
