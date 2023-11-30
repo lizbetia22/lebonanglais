@@ -2,36 +2,56 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\AdvertRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AdvertRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'advert:item']),
+        new Post(denormalizationContext: ['groups' => 'advert:post']),
+        new GetCollection(normalizationContext: ['groups' => 'advert:list'])
+    ],
+    order: ['id' => 'ASC'],
+    paginationEnabled: true,
+)]
 class Advert
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['advert:item', 'advert:list'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['advert:item', 'advert:list', 'advert:post'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, length: 1200)]
+    #[Groups(['advert:item', 'advert:list', 'advert:post'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['advert:item', 'advert:list', 'advert:post'])]
     private ?string $author = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['advert:item', 'advert:list', 'advert:post'])]
     private ?string $email = null;
 
     #[ORM\ManyToOne(inversedBy: 'adverts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['advert:item', 'advert:list', 'advert:post'])]
     private ?Category $category = null;
 
     #[ORM\Column]
@@ -39,18 +59,23 @@ class Advert
         min: 1,
         max: 1000000,
     )]
+    #[Groups(['advert:item', 'advert:list', 'advert:post'])]
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['advert:item', 'advert:list'])]
     private ?string $state = "draft";
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['advert:item', 'advert:list'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['advert:item', 'advert:list'])]
     private ?\DateTimeInterface $publishedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'advert', targetEntity: Picture::class,cascade: ['persist'])]
+    #[Groups(['advert:item', 'advert:list', 'advert:post'])]
     private Collection $pictures;
 
     public function __construct()
