@@ -6,12 +6,14 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Controller\MediaObjectActionController;
 use App\Repository\PictureRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Mime\Part\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\OpenApi\Model;
 
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
@@ -19,7 +21,28 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => 'picture:item']),
-        new Post(denormalizationContext: ['groups' => 'picture:post']),
+        new Post(
+            controller: MediaObjectActionController::class,
+            openapi: new Model\Operation(
+                requestBody: new Model\RequestBody(
+                    content: new \ArrayObject([
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ])
+                )
+            ),
+            validationContext: ['groups' => ['Default', 'media_object_create']],
+            deserialize: false
+        ),
         new GetCollection(normalizationContext: ['groups' => 'picture:list'])
     ],
     order: ['id' => 'ASC'],

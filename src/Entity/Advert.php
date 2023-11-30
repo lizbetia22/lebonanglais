@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -25,6 +29,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     order: ['id' => 'ASC'],
     paginationEnabled: true,
 )]
+#[ApiFilter(OrderFilter::class, properties: ['publishedAt', 'price'])]
+#[ApiFilter(RangeFilter::class, properties: ['price'])]
+#[ApiFilter(SearchFilter::class, properties: ['category'])]
 class Advert
 {
     #[ORM\Id]
