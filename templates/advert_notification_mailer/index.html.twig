@@ -1,0 +1,10 @@
+<p>Hello AdminUser,</p>
+<p>A new advert has been created:</p>
+<p>Title: {{ advert.title }}</p>
+<p>Please choose an action for the published advert:</p>
+
+<a href="{{ absolute_url(path('app_advert_show', {'id': advert.id})) }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded m-2">View Advert</a>
+
+<a href="{{ absolute_url(path('app_advert_state', {'id': advert.id, 'transition': 'publish'})) }}" class="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded m-2">Publish Advert</a>
+
+<a href="{{ absolute_url(path('app_advert_state', {'id': advert.id, 'transition': 'reject'})) }}" class="inline-block bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded m-2">Reject Advert</a>

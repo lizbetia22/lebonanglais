@@ -30,7 +30,7 @@ class DeleteNotAttachedImagesCommand extends Command
     {
         parent::configure();
         $this
-            ->addOption('days', null, InputOption::VALUE_REQUIRED, 'days ago')
+            ->addArgument('days', null, InputOption::VALUE_REQUIRED, 'days ago')
         ;
     }
 
@@ -39,7 +39,7 @@ class DeleteNotAttachedImagesCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $daysAgo = $input->getOption('days');
+            $daysAgo = $input->getArgument('days');
 
             if (!is_numeric($daysAgo) || $daysAgo <= 0) {
                 $io->error('Incorrect numbers of days');

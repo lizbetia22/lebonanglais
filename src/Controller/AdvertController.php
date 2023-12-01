@@ -3,24 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Advert;
-use App\Entity\Picture;
 use App\Form\AdvertEdit;
 use App\Form\AdvertType;
 use App\Repository\AdvertRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
-use Vich\UploaderBundle\Handler\UploadHandler;
 
-//#[Route('/advert')]
 class AdvertController extends AbstractController
 {
     public function __construct(WorkflowInterface $advertWorkflow)
@@ -37,7 +30,7 @@ class AdvertController extends AbstractController
     }
 
     #[Route('/advert/new', name: 'app_advert_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $advert = new Advert();
         $form = $this->createForm(AdvertType::class, $advert);

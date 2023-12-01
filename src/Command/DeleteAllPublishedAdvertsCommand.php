@@ -30,7 +30,7 @@ class DeleteAllPublishedAdvertsCommand extends Command
     protected function configure(): void
     {
         parent::configure();
-        $this->addOption('days', null, InputOption::VALUE_REQUIRED, 'days ago');
+        $this->addArgument('days', null, InputOption::VALUE_REQUIRED, 'days ago');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -38,7 +38,7 @@ class DeleteAllPublishedAdvertsCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $daysAgo = $input->getOption('days');
+            $daysAgo = $input->getArgument('days');
 
             if (!is_numeric($daysAgo) || $daysAgo <= 0) {
                 $io->error('Incorrect numbers of days');
