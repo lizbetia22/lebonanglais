@@ -30,7 +30,7 @@ class PreRemoveEventListener
         }
 
         if ($entity instanceof AdminUser){
-            if ($entity->getEmail()  === $this->tokenStorage->getToken()->getUser()->getEmail()){
+            if ($entity->getEmail()  === $this->tokenStorage->getToken()?->getUser()->getEmail()){
                 throw new \Exception('You cannot delete your own account.');
             }
         }
