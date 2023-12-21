@@ -26,10 +26,6 @@ class AdvertControllerTest extends WebTestCase
         $this->repository = static::getContainer()->get('doctrine')->getRepository(Advert::class);
         $this->categoryRepository = static::getContainer()->get('doctrine')->getRepository(Category::class);
         $this->manager = static::getContainer()->get('doctrine')->getManager();
-
-        foreach ($this->repository->findAll() as $object) {
-            $this->manager->remove($object);
-        }
         $this->manager->flush();
     }
 
