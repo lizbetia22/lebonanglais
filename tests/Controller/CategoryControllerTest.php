@@ -32,7 +32,7 @@ class CategoryControllerTest extends WebTestCase
         self::assertPageTitleContains('Category index');
     }
 
-    public function testNew(): void
+    public function testCreateNewCategory(): void
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
@@ -40,17 +40,17 @@ class CategoryControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(200);
 
         $this->client->submitForm('Save', [
-            'category[name]' => 'Testing',
+            'category[name]' => 'Test category',
         ]);
 
         self::assertResponseRedirects('/admin/category/');
         self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
     }
 
-    public function testShow(): void
+    public function testShowCategory(): void
     {
         $fixture = new Category();
-        $fixture->setName('My Title');
+        $fixture->setName('Test name');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -58,14 +58,13 @@ class CategoryControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
 
         self::assertResponseStatusCodeSame(200);
-//        self::assertPageTitleContains('Category');
-//        self::assertSelectorTextContains('body', 'My Title');
+
     }
 
-    public function testEdit(): void
+    public function testEditCategory(): void
     {
         $fixture = new Category();
-        $fixture->setName('My Yesu');
+        $fixture->setName('Test name');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -73,22 +72,22 @@ class CategoryControllerTest extends WebTestCase
         $this->client->request('GET', '/admin/category/'.$fixture->getId().'/edit');
 
         $this->client->submitForm('Save', [
-            'category[name]' => 'Something New',
+            'category[name]' => 'Test category',
         ]);
 
         self::assertResponseRedirects('/admin/category/');
 
         $updatedFixture = $this->repository->find($fixture->getId());
 
-        self::assertSame('Something New', $updatedFixture->getName());
+        self::assertSame('Test category', $updatedFixture->getName());
     }
 
-    public function testRemove(): void
+    public function testDeleteCategory(): void
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
         $fixture = new Category();
-        $fixture->setName('My Title');
+        $fixture->setName('Test name');
 
         $this->manager->persist($fixture);
         $this->manager->flush();

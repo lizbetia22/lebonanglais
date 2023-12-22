@@ -3,7 +3,12 @@
 namespace Api;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\Controller\AdminCategoryController;
 use App\Entity\Category;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryControllerApiTest extends ApiTestCase
 {
@@ -25,7 +30,7 @@ class CategoryControllerApiTest extends ApiTestCase
         $this->entityManager = null;
     }
 
-    public function testGetCategories()
+    public function testGetAllCategories()
     {
         $this->client->request('GET', '/api/categories');
 
@@ -33,10 +38,10 @@ class CategoryControllerApiTest extends ApiTestCase
         $this->assertJson($this->client->getResponse()->getContent());
     }
 
-    public function testGetCategoryById()
+    public function testGetCategoryShow()
     {
         $fixture = new Category();
-        $fixture->setName('Test Category');
+        $fixture->setName('Test name');
 
         $this->entityManager->persist($fixture);
         $this->entityManager->flush();
@@ -46,4 +51,5 @@ class CategoryControllerApiTest extends ApiTestCase
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertJson($this->client->getResponse()->getContent());
     }
+
 }

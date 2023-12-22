@@ -39,4 +39,25 @@ class DeleteNotAttachedImagesCommandTest extends KernelTestCase
         $this->assertStringContainsString('All pictures was deleted which were created  ' . $daysAgo . ' days ago', $output);
     }
 
+    public function testExecuteIncorrectValue()
+    {
+        self::bootKernel();
+        $application = new Application(self::$kernel);
+
+        $command = $application->find('DeleteAllPublishedAdverts');
+        $commandTester = new CommandTester($command);
+        $daysAgo = '0';
+
+        $commandTester->execute([
+            'days' => '0',
+        ]);
+
+        $commandTester->execute([
+            'days' => $daysAgo,
+        ]);
+
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString('Incorrect numbers of days', $output);
+    }
+
 }

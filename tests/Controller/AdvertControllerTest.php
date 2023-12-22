@@ -37,24 +37,22 @@ class AdvertControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('Advert index');
 
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
-    public function testShow(): void
+    public function testShowAdvert(): void
     {
         $fixtureCategory = new Category();
-        $fixtureCategory->setName('My Title');
+        $fixtureCategory->setName('Test name');
 
         $this->manager->persist($fixtureCategory);
         $this->manager->flush();
 
         $fixture = new Advert();
-        $fixture->setTitle('My Title');
-        $fixture->setContent('My Title');
-        $fixture->setAuthor('My Title');
-        $fixture->setPrice(12);
-        $fixture->setEmail('testnew@gmail.com');
+        $fixture->setTitle('Test title');
+        $fixture->setContent('Test content');
+        $fixture->setAuthor('Test author');
+        $fixture->setPrice(100);
+        $fixture->setEmail('test@gmail.com');
         $fixture->setCategory($fixtureCategory);
 
         $this->manager->persist($fixture);
@@ -64,24 +62,24 @@ class AdvertControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(200);
         self::assertPageTitleContains('Advert');
-        self::assertSelectorTextContains('body', 'My Title');
+        self::assertSelectorTextContains('body', 'Test title');
     }
 
 
-    public function testUpdateState(): void
+    public function testUpdateStateOfAdvert(): void
     {
         $fixtureCategory = new Category();
-        $fixtureCategory->setName('My Title');
+        $fixtureCategory->setName('Test name');
 
         $this->manager->persist($fixtureCategory);
         $this->manager->flush();
 
         $fixture = new Advert();
-        $fixture->setTitle('My Title');
-        $fixture->setContent('My Title');
-        $fixture->setAuthor('My Title');
-        $fixture->setPrice(12);
-        $fixture->setEmail('testnew@gmail.com');
+        $fixture->setTitle('Test title');
+        $fixture->setContent('Test content');
+        $fixture->setAuthor('Test author');
+        $fixture->setPrice(100);
+        $fixture->setEmail('test@gmail.com');
         $fixture->setCategory($fixtureCategory);
 
         $this->manager->persist($fixture);

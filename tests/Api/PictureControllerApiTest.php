@@ -39,17 +39,17 @@ class PictureControllerApiTest extends ApiTestCase
     public function testGetPictureById()
     {
         $fixtureCategory = new Category();
-        $fixtureCategory->setName('My Title');
+        $fixtureCategory->setName('Test name');
 
         $this->entityManager->persist($fixtureCategory);
         $this->entityManager->flush();
 
         $fixtureAdvert = new Advert();
-        $fixtureAdvert->setTitle('My Title');
-        $fixtureAdvert->setContent('My Title');
-        $fixtureAdvert->setAuthor('My Title');
-        $fixtureAdvert->setPrice(12);
-        $fixtureAdvert->setEmail('testnew@gmail.com');
+        $fixtureAdvert->setTitle('Test title');
+        $fixtureAdvert->setContent('Test content');
+        $fixtureAdvert->setAuthor('Test author');
+        $fixtureAdvert->setPrice(100);
+        $fixtureAdvert->setEmail('test@gmail.com');
         $fixtureAdvert->setCategory($fixtureCategory);
 
         $this->entityManager->persist($fixtureAdvert);
@@ -72,17 +72,17 @@ class PictureControllerApiTest extends ApiTestCase
     public function testCreatePicture()
     {
         $fixtureCategory = new Category();
-        $fixtureCategory->setName('My Title');
+        $fixtureCategory->setName('Test name');
 
         $this->entityManager->persist($fixtureCategory);
         $this->entityManager->flush();
 
         $fixtureAdvert = new Advert();
-        $fixtureAdvert->setTitle('My Title');
-        $fixtureAdvert->setContent('My Title');
-        $fixtureAdvert->setAuthor('My Title');
-        $fixtureAdvert->setPrice(12);
-        $fixtureAdvert->setEmail('testnew@gmail.com');
+        $fixtureAdvert->setTitle('Test title');
+        $fixtureAdvert->setContent('Test content');
+        $fixtureAdvert->setAuthor('Test author');
+        $fixtureAdvert->setPrice(100);
+        $fixtureAdvert->setEmail('test@gmail.com');
         $fixtureAdvert->setCategory($fixtureCategory);
 
         $this->entityManager->persist($fixtureAdvert);

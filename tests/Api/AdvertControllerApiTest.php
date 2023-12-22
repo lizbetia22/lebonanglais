@@ -5,16 +5,20 @@ namespace Api;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Advert;
 use App\Entity\Category;
+use App\Repository\AdvertRepository;
+use http\Client\Response;
 
 class AdvertControllerApiTest extends ApiTestCase
 {
     private $client;
     private $entityManager;
 
+    private $advertRepositoryMock;
+
     protected function setUp(): void
     {
         parent::setUp();
-
+        $this->advertRepositoryMock = $this->createMock(AdvertRepository::class);
         $this->client = static::createClient();
         $this->entityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
     }
@@ -34,19 +38,20 @@ class AdvertControllerApiTest extends ApiTestCase
         $this->assertJson($this->client->getResponse()->getContent());
     }
 
+
     public function testGetAdvertById()
     {
         $fixtureCategory = new Category();
-        $fixtureCategory->setName('My Category');
+        $fixtureCategory->setName('Test category');
 
         $this->entityManager->persist($fixtureCategory);
         $this->entityManager->flush();
 
         $fixture = new Advert();
-        $fixture->setTitle('Test Advert');
-        $fixture->setContent('This is a test advert');
+        $fixture->setTitle('Test title');
+        $fixture->setContent('Test content');
         $fixture->setAuthor('Test Author');
-        $fixture->setPrice(100.00);
+        $fixture->setPrice(100);
         $fixture->setEmail('test@example.com');
         $fixture->setCategory($fixtureCategory);
 
@@ -62,7 +67,7 @@ class AdvertControllerApiTest extends ApiTestCase
     public function testCreateAdvert()
     {
         $fixtureCategory = new Category();
-        $fixtureCategory->setName('My Category');
+        $fixtureCategory->setName('Test category');
 
         $this->entityManager->persist($fixtureCategory);
         $this->entityManager->flush();
@@ -76,10 +81,10 @@ class AdvertControllerApiTest extends ApiTestCase
                     'CONTENT-TYPE' => 'application/ld+json',
                 ],
                 'json' => [
-                    "title" => "Test Advert",
-                    "content" => "This is a test advert",
+                    "title" => "Test title",
+                    "content" => "Test content",
                     "author" => "Test Author",
-                    "email" => "teszfefet@example.com",
+                    "email" => "test@example.com",
                     "category" => '/api/categories/' . $fixtureCategory->getId(),
                     "price" => 100,
                 ]

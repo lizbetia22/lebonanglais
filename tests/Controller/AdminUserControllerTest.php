@@ -35,7 +35,7 @@ class AdminUserControllerTest extends WebTestCase
         self::assertPageTitleContains('AdminUser index');
     }
 
-    public function testNew(): void
+    public function testCreateNewUser(): void
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
@@ -44,9 +44,9 @@ class AdminUserControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(200);
 
         $this->client->submitForm('Save', [
-            'admin_user[username]' => 'Testing',
-            'admin_user[email]' => 'test4@test.com',
-            'admin_user[plainPassword]' => 'Testing',
+            'admin_user[username]' => 'Test name',
+            'admin_user[email]' => 'test@gmail.com',
+            'admin_user[plainPassword]' => 'azerty',
         ]);
 
         self::assertResponseRedirects('/admin/user/');
@@ -54,12 +54,12 @@ class AdminUserControllerTest extends WebTestCase
         self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
     }
 
-    public function testShow(): void
+    public function testShowUser(): void
     {
         $fixture = new AdminUser();
-        $fixture->setUsername('test3');
-        $fixture->setEmail('test3@test.com');
-        $fixture->setPlainPassword('MyTitle');
+        $fixture->setUsername('Test name');
+        $fixture->setEmail('test@gmail.com');
+        $fixture->setPlainPassword('azerty');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -70,12 +70,12 @@ class AdminUserControllerTest extends WebTestCase
         self::assertPageTitleContains('AdminUser');
     }
 
-    public function testEdit(): void
+    public function testEditUser(): void
     {
         $fixture = new AdminUser();
-        $fixture->setUsername('test2');
-        $fixture->setEmail('test2@test.com');
-        $fixture->setPlainPassword('MyTitle');
+        $fixture->setUsername('Test name');
+        $fixture->setEmail('test@example.com');
+        $fixture->setPlainPassword('azerty');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -83,28 +83,28 @@ class AdminUserControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
 
         $this->client->submitForm('Update', [
-            'admin_user[username]' => 'test1',
-            'admin_user[email]' => 'test1@test1.com',
-            'admin_user[plainPassword]' => 'dzdzdz',
+            'admin_user[username]' => 'Test name',
+            'admin_user[email]' => 'test@example.com',
+            'admin_user[plainPassword]' => 'azerty',
         ]);
 
         self::assertResponseRedirects('/admin/user/');
 
         $updatedFixture = $this->repository->find($fixture->getId());
 
-        self::assertSame('test1', $updatedFixture->getUsername());
-        self::assertSame('test1@test1.com', $updatedFixture->getEmail());
+        self::assertSame('Test name', $updatedFixture->getUsername());
+        self::assertSame('test@example.com', $updatedFixture->getEmail());
     }
 
 
-    public function testRemove(): void
+    public function testRemoveUser(): void
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
         $fixture = new AdminUser();
-        $fixture->setUsername('My Title');
-        $fixture->setEmail('test@test.com');
-        $fixture->setPlainPassword('My Title');
+        $fixture->setUsername('Test name');
+        $fixture->setEmail('test@gmail.com');
+        $fixture->setPlainPassword('azerty');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
